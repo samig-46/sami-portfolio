@@ -10,7 +10,7 @@ import SectionHeader from '@/components/ui/SectionHeader'
 import GlassCard from '@/components/ui/GlassCard'
 import { services } from '@/data/services'
 
-const iconMap: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+const iconMap: Record<string, React.ComponentType<{ size?: number | string; className?: string }>> = {
   Palette, Code2, Globe, Zap, Search, Mail,
   BarChart3, Workflow, Brain, Layout, TrendingUp, Shield,
 }
