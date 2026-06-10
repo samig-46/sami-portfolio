@@ -13,7 +13,7 @@ const SkillSphere = dynamic(() => import('@/components/three/SkillSphere'), {
   loading: () => <div className="w-full h-full bg-transparent" />,
 })
 
-const iconMap: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+const iconMap: Record<string, React.ComponentType<{ size?: number | string; className?: string }>> = {
   Palette, Code2, Globe, Search, Workflow, Brain,
 }
 
