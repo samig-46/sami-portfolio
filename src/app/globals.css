@@ -1,0 +1,167 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-primary: #6D1F2A;
+  --brand-secondary: #8A2635;
+  --brand-dark: #111827;
+  --brand-light: #F8FAFC;
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+/* Smooth scroll - managed by Lenis */
+html {
+  scroll-behavior: auto;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0F1A;
+}
+::-webkit-scrollbar-thumb {
+  background: #6D1F2A;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8A2635;
+}
+
+/* Selection */
+::selection {
+  background: rgba(138, 38, 53, 0.4);
+  color: #F8FAFC;
+}
+
+/* Base */
+body {
+  background-color: #0A0F1A;
+  color: #F8FAFC;
+  font-feature-settings: 'ss01', 'cv01', 'cv02';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  cursor: none;
+}
+
+/* Restore cursor on touch devices */
+@media (hover: none) {
+  body {
+    cursor: auto;
+  }
+}
+
+/* Hide cursor on interactive elements */
+a, button, input, textarea, select, [role="button"] {
+  cursor: none;
+}
+@media (hover: none) {
+  a, button, input, textarea, select, [role="button"] {
+    cursor: auto;
+  }
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, #6D1F2A, #8A2635, #C0392B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass card utility */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Glow utility classes */
+.text-glow {
+  text-shadow: 0 0 30px rgba(138, 38, 53, 0.8);
+}
+
+.box-glow {
+  box-shadow: 0 0 40px rgba(138, 38, 53, 0.3);
+}
+
+/* Noise texture overlay */
+.noise-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Focus visible */
+:focus-visible {
+  outline: 2px solid rgba(138, 38, 53, 0.6);
+  outline-offset: 2px;
+}
+
+/* Prose override */
+.prose-invert p {
+  color: #9CA3AF;
+}
+
+/* Loading screen body lock */
+body.loading {
+  overflow: hidden;
+}
+
+/* Section base */
+section {
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Line clamp utilities */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* Grid background pattern */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(138, 38, 53, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(138, 38, 53, 0.06) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* Smooth transitions on Three.js canvas */
+canvas {
+  display: block;
+}
