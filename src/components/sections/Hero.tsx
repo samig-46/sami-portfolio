@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useEffect } from 'react'
+import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import { ArrowDown, ArrowRight } from 'lucide-react'
@@ -23,6 +23,56 @@ const stats = [
   { value: 100, suffix: '%', label: 'Client Satisfaction' },
 ]
 
+const EASE = [0.43, 0.13, 0.23, 0.96] as const
+const BASE = 1.5 // syncs with LoadingScreen exit
+
+// Headline lines, revealed word-by-word through a mask
+const headline: { text: string; gradient?: boolean; muted?: boolean }[][] = [
+  [{ text: 'I' }, { text: 'Design,' }],
+  [{ text: 'Build' }, { text: '&' }, { text: 'Scale', gradient: true }],
+  [{ text: 'Digital' }, { text: 'Experiences.', muted: true }],
+]
+
+function HeadlineWord({
+  word,
+  delay,
+  gradient,
+  muted,
+}: {
+  word: string
+  delay: number
+  gradient?: boolean
+  muted?: boolean
+}) {
+  return (
+    <span className="inline-block overflow-hidden align-bottom pb-2 -mb-2">
+      <motion.span
+        initial={{ y: '110%', rotate: 4 }}
+        animate={{ y: '0%', rotate: 0 }}
+        transition={{ duration: 0.8, delay, ease: EASE }}
+        className={`inline-block origin-left ${
+          gradient
+            ? 'relative bg-gradient-to-r from-brand-primary via-brand-secondary to-brand-accent bg-clip-text text-transparent'
+            : muted
+              ? 'text-brand-muted/60'
+              : 'text-white'
+        }`}
+      >
+        {word}
+        {gradient && (
+          <motion.span
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.8, delay: delay + 0.5, ease: EASE }}
+            className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-brand-primary to-brand-accent origin-left"
+          />
+        )}
+      </motion.span>
+      <span>&nbsp;</span>
+    </span>
+  )
+}
+
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollY } = useScroll()
@@ -32,6 +82,8 @@ export default function Hero() {
   const scrollToAbout = () => {
     document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })
   }
+
+  let wordIndex = 0
 
   return (
     <section
@@ -68,7 +120,7 @@ export default function Hero() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 2.5 }}
+              transition={{ duration: 0.6, delay: BASE }}
               className="inline-flex items-center gap-2.5 self-start mb-8"
             >
               <div className="flex items-center gap-2 h-7 px-3 rounded-full border border-green-500/25 bg-green-500/[0.08]">
@@ -77,50 +129,42 @@ export default function Hero() {
               </div>
             </motion.div>
 
-            {/* Main headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 2.6, ease: [0.43, 0.13, 0.23, 0.96] }}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6"
-            >
-              <span className="text-white">I Design,</span>
-              <br />
-              <span className="text-white">Build &amp; </span>
-              <span className="relative">
-                <span className="bg-gradient-to-r from-brand-primary via-brand-secondary to-brand-accent bg-clip-text text-transparent">
-                  Scale
+            {/* Main headline — word-by-word mask reveal */}
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6">
+              {headline.map((line, lineIdx) => (
+                <span key={lineIdx} className="block">
+                  {line.map((w) => {
+                    const delay = BASE + 0.1 + wordIndex * 0.09
+                    wordIndex += 1
+                    return (
+                      <HeadlineWord
+                        key={w.text}
+                        word={w.text}
+                        delay={delay}
+                        gradient={w.gradient}
+                        muted={w.muted}
+                      />
+                    )
+                  })}
                 </span>
-                {/* Underline glow */}
-                <motion.div
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ duration: 0.8, delay: 3.2 }}
-                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-brand-primary to-brand-accent origin-left"
-                />
-              </span>
-              <br />
-              <span className="text-white">Digital</span>{' '}
-              <span className="text-brand-muted/60">Experiences.</span>
-            </motion.h1>
+              ))}
+            </h1>
 
             {/* Typewriter subtitle */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 2.8 }}
+              transition={{ duration: 0.6, delay: BASE + 0.5 }}
               className="text-brand-muted text-lg mb-3 min-h-[28px]"
             >
               <TypeAnimation
                 sequence={[
-                  3200,
+                  2200,
                   'UI/UX Designer & Frontend Engineer',
                   2000,
                   'WordPress & CMS Specialist',
                   2000,
                   'Technical SEO & Growth Expert',
-                  2000,
-                  'Business Automation Consultant',
                   2000,
                   'AI Product Designer',
                   2000,
@@ -135,7 +179,7 @@ export default function Hero() {
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 3.0 }}
+              transition={{ duration: 0.6, delay: BASE + 0.65 }}
               className="text-brand-muted/80 text-base leading-relaxed max-w-lg mb-10"
             >
               From UI/UX design and frontend engineering to SEO, CRM automation, and
@@ -146,7 +190,7 @@ export default function Hero() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 3.1 }}
+              transition={{ duration: 0.6, delay: BASE + 0.8 }}
               className="flex flex-wrap gap-4 mb-12"
             >
               <MagneticButton>
@@ -182,7 +226,7 @@ export default function Hero() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 3.3 }}
+              transition={{ delay: BASE + 1.0 }}
               className="flex items-center gap-6 text-brand-muted/50 text-xs"
             >
               {['Startups', 'Enterprises', 'NGOs', 'SaaS'].map((tag) => (
@@ -198,7 +242,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, delay: 2.7, ease: [0.43, 0.13, 0.23, 0.96] }}
+            transition={{ duration: 1.2, delay: BASE + 0.2, ease: EASE }}
             className="relative aspect-square max-w-[560px] w-full mx-auto lg:mx-0"
           >
             {/* Outer glow rings */}
@@ -211,10 +255,10 @@ export default function Hero() {
 
             {/* Floating skill badges */}
             {[
-              { label: 'UI/UX', position: 'top-6 left-6', delay: 3.2 },
-              { label: 'Next.js', position: 'top-1/4 -right-4', delay: 3.4 },
-              { label: 'SEO', position: 'bottom-1/4 -left-4', delay: 3.6 },
-              { label: 'AI', position: 'bottom-8 right-10', delay: 3.8 },
+              { label: 'UI/UX', position: 'top-6 left-6', delay: BASE + 0.7 },
+              { label: 'Next.js', position: 'top-1/4 -right-4', delay: BASE + 0.9 },
+              { label: 'SEO', position: 'bottom-1/4 -left-4', delay: BASE + 1.1 },
+              { label: 'AI', position: 'bottom-8 right-10', delay: BASE + 1.3 },
             ].map((badge) => (
               <motion.div
                 key={badge.label}
@@ -233,7 +277,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 3.4 }}
+          transition={{ duration: 0.7, delay: BASE + 1.0 }}
           className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-white/[0.06]"
         >
           {stats.map((stat) => (
@@ -252,7 +296,7 @@ export default function Hero() {
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 3.8 }}
+        transition={{ delay: BASE + 1.4 }}
         onClick={scrollToAbout}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 text-brand-muted/50 text-xs tracking-widest uppercase hover:text-brand-muted transition-colors"
       >

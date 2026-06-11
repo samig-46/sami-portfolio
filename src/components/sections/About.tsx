@@ -49,26 +49,46 @@ function TimelineItem({ year, title, desc, index }: { year: string; title: strin
       initial={{ opacity: 0, x: -30 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.15 }}
-      className="flex gap-6 group"
+      className="relative flex gap-6 group pl-0.5"
     >
-      {/* Timeline line */}
-      <div className="flex flex-col items-center">
-        <motion.div
-          animate={inView ? { scale: [1, 1.3, 1] } : {}}
-          transition={{ delay: index * 0.15 + 0.3 }}
-          className="w-3 h-3 rounded-full bg-brand-secondary border-2 border-brand-primary/40 shrink-0 mt-1.5 group-hover:shadow-glow-sm transition-shadow"
-        />
-        {index < timeline.length - 1 && (
-          <div className="w-px flex-1 mt-2 bg-gradient-to-b from-brand-secondary/40 to-transparent" />
-        )}
-      </div>
+      {/* Dot */}
+      <motion.div
+        initial={{ scale: 0 }}
+        animate={inView ? { scale: [0, 1.4, 1] } : {}}
+        transition={{ delay: index * 0.15 + 0.2, duration: 0.5 }}
+        className="relative z-10 w-3 h-3 rounded-full bg-brand-secondary border-2 border-brand-primary/40 shrink-0 mt-1.5 group-hover:shadow-glow-sm transition-shadow"
+      />
       {/* Content */}
-      <div className="pb-8">
+      <div className="pb-10">
         <span className="text-brand-secondary text-xs font-mono font-bold tracking-widest">{year}</span>
         <h4 className="text-white font-semibold mt-1 mb-1">{title}</h4>
         <p className="text-brand-muted text-sm leading-relaxed">{desc}</p>
       </div>
     </motion.div>
+  )
+}
+
+function Timeline() {
+  const trackRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: trackRef,
+    offset: ['start 0.85', 'end 0.55'],
+  })
+  const lineScale = useTransform(scrollYProgress, [0, 1], [0, 1])
+
+  return (
+    <div ref={trackRef} className="relative">
+      {/* Track */}
+      <div className="absolute left-[6.5px] top-1.5 bottom-10 w-px bg-white/[0.06]" />
+      {/* Scroll-drawn line */}
+      <motion.div
+        style={{ scaleY: lineScale }}
+        className="absolute left-[6.5px] top-1.5 bottom-10 w-px origin-top bg-gradient-to-b from-brand-secondary via-brand-secondary/70 to-brand-accent"
+      />
+      {timeline.map((item, i) => (
+        <TimelineItem key={item.year} {...item} index={i} />
+      ))}
+    </div>
   )
 }
 
@@ -141,9 +161,7 @@ export default function About() {
                   <span className="w-8 h-px bg-brand-secondary" />
                   The Journey
                 </h3>
-                {timeline.map((item, i) => (
-                  <TimelineItem key={item.year} {...item} index={i} />
-                ))}
+                <Timeline />
               </div>
             </motion.div>
           </div>

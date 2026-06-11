@@ -10,10 +10,9 @@ export default function LoadingScreen() {
   useEffect(() => {
     setMounted(true)
     const steps = [
-      { target: 30, delay: 100, duration: 400 },
-      { target: 65, delay: 500, duration: 600 },
-      { target: 90, delay: 1100, duration: 400 },
-      { target: 100, delay: 1500, duration: 300 },
+      { target: 40, delay: 80, duration: 300 },
+      { target: 75, delay: 400, duration: 400 },
+      { target: 100, delay: 850, duration: 300 },
     ]
 
     const timers: ReturnType<typeof setTimeout>[] = []
@@ -34,7 +33,7 @@ export default function LoadingScreen() {
       timers.push(t)
     })
 
-    const done = setTimeout(() => setDone(true), 2200)
+    const done = setTimeout(() => setDone(true), 1400)
     timers.push(done)
 
     return () => timers.forEach(clearTimeout)

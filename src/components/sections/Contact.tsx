@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Mail, Phone, MapPin, Send, CheckCircle, Calendar, MessageCircle, Loader2 } from 'lucide-react'
 import SectionHeader from '@/components/ui/SectionHeader'
 import GlassCard from '@/components/ui/GlassCard'
+import LiveClock from '@/components/common/LiveClock'
 import type { ContactFormData } from '@/types'
 
 const budgetOptions = ['< $1,000', '$1,000 – $5,000', '$5,000 – $15,000', '$15,000 – $50,000', '$50,000+']
@@ -184,11 +185,19 @@ export default function Contact() {
               </div>
             </motion.a>
 
-            {/* Availability indicator */}
-            <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
-              <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              <span className="text-brand-muted text-xs">Currently accepting new projects for Q1 2025</span>
-            </div>
+            {/* Local time + availability */}
+            <GlassCard className="p-5">
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+                <div>
+                  <p className="text-brand-muted/60 text-[10px] tracking-[0.25em] uppercase mb-1.5">My local time</p>
+                  <LiveClock />
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                  <span className="text-brand-muted text-xs">Accepting new projects</span>
+                </div>
+              </div>
+            </GlassCard>
           </div>
 
           {/* Right — Form */}

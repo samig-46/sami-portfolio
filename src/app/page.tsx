@@ -15,6 +15,7 @@ import Contact from '@/components/sections/Contact'
 import LoadingScreen from '@/components/common/LoadingScreen'
 import CustomCursor from '@/components/common/CustomCursor'
 import ScrollProgress from '@/components/common/ScrollProgress'
+import SectionMarquee from '@/components/common/SectionMarquee'
 import { useLenis } from '@/hooks/useLenis'
 
 export default function Home() {
@@ -76,6 +77,7 @@ export default function Home() {
       <main>
         <Hero />
         <About />
+        <SectionMarquee text="Design · Develop · Automate · Scale" />
         <Services />
         <Skills />
         <Projects />
@@ -83,6 +85,7 @@ export default function Home() {
         <Process />
         <Testimonials />
         <Blog />
+        <SectionMarquee text="Let's Work Together" reverse />
         <Contact />
       </main>
       <Footer />
